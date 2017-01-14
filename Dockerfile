@@ -59,5 +59,9 @@ RUN apt-get purge -y --auto-remove \
     zlib1g-dev \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
+RUN groupadd -r nginx \
+  && useradd -r -g nginx nginx \
+  && chown -R nginx:nginx /usr/local/nginx
+
 EXPOSE 80 443
 CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
