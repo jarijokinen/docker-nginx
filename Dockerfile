@@ -9,7 +9,8 @@
 #   docker build -t nginx .
 #   docker volume create --name nginx-conf
 #   docker volume create --name nginx-data
-#   docker run -d -p 127.0.0.1:80:80 -v nginx-conf:/usr/local/nginx/conf \
+#   docker run -d -p 127.0.0.1:80:80 -p 127.0.0.1:443:443 \
+#     -v nginx-conf:/usr/local/nginx/conf \
 #     -v nginx-data:/usr/local/nginx/www nginx
 
 FROM debian:stretch-slim
@@ -58,5 +59,5 @@ RUN apt-get purge -y --auto-remove \
     zlib1g-dev \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
-EXPOSE 80
+EXPOSE 80 443
 CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
