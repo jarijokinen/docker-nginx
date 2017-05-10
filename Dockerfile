@@ -37,13 +37,21 @@ RUN wget http://nginx.org$( \
     | grep -oP '/download/nginx.+?.tar.gz' | head -1 \
   ) -O /tmp/nginx.tar.gz \
   && mkdir /tmp/nginx \
-  && tar -xzvf /tmp/nginx.tar.gz -C /tmp/nginx --strip-components=1
+  && tar -xf /tmp/nginx.tar.gz -C /tmp/nginx --strip-components=1
+
+# Get the ngx_cache_purge module
+RUN wget http://labs.frickle.com/files/ngx_cache_purge-2.3.tar.gz \
+    -O /tmp/ngx_cache_purge.tar.gz \
+    && mkdir /tmp/ngx_cache_purge \
+    && tar -xf /tmp/ngx_cache_purge.tar.gz -C /tmp/ngx_cache_purge \
+    --strip-components=1
 
 # Configure, compile and install nginx
 WORKDIR /tmp/nginx
 RUN ./configure \
   --with-http_gzip_static_module \
   --with-http_ssl_module \
+  --add-module=/tmp/ngx_cache_purge \
   && make \
   && make install
 WORKDIR /
